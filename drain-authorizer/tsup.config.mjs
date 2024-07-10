@@ -11,7 +11,6 @@ export default defineConfig((options) => {
     bundle: true,
     target: "es2022",
     platform: "node",
-    minify: !options.watch,
     treeshake: true,
     external: ["@aws-sdk/client-ssm"],
   };

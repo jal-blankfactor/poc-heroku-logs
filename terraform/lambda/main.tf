@@ -1,8 +1,8 @@
 locals {
   env_prefix     = "${var.env_level}-${var.env_name}"
   qualified_name = "${local.env_prefix}-${var.short_name}"
-  dist_dir       = "${path.cwd}/${var.app_dir}/dist"
-  build_dir      = "${path.cwd}/${var.app_dir}/bulid"
+  src_dir        = "${path.cwd}/${var.app_dir}/dist"
+  build_dir      = "${path.cwd}/${var.app_dir}/build"
 }
 
 resource "null_resource" "build" {
@@ -17,7 +17,7 @@ resource "null_resource" "build" {
 
 data "archive_file" "self" {
   type        = "zip"
-  source_file = local.dist_dir
+  source_dir  = local.src_dir
   output_path = "${local.build_dir}/handler.zip"
   depends_on = [
     null_resource.build
@@ -25,7 +25,7 @@ data "archive_file" "self" {
 }
 
 resource "aws_lambda_function" "self" {
-  filename      = "${local.dist_dir}/handler.zip"
+  filename      = "${local.build_dir}/handler.zip"
   function_name = local.qualified_name
   role          = aws_iam_role.self.arn
   handler       = "index.handler"
@@ -50,14 +50,15 @@ resource "aws_lambda_function" "self" {
   }
 }
 
-resource "aws_iam_role_policy_attachment" "basic" {
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-  role       = aws_iam_role.self.name
-}
+# resource "aws_iam_role_policy_attachment" "basic" {
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+#   role       = aws_iam_role.self.name
+# }
 
 resource "aws_iam_role" "self" {
-  name_prefix         = local.qualified_name
-  managed_policy_arns = var.policy_arns
+  name_prefix = local.qualified_name
+
+  managed_policy_arns = concat(["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"], var.policy_arns)
   assume_role_policy  = data.aws_iam_policy_document.assume_role_policy.json
 }
 

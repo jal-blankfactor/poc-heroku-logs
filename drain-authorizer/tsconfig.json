@@ -17,7 +17,6 @@
     "forceConsistentCasingInFileNames": true,
     "preserveSymlinks": true,
     "lib": ["es2023"],
-    "types": ["node"],
     "typeRoots": ["node_modules/@types"]
   },
   "exclude": ["node_modules"]

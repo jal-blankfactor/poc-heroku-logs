@@ -8,8 +8,10 @@ export const handler: Handler = async (
   event: APIGatewayProxyEventV2
 ): Promise<APIGatewayProxyResultV2> => {
   try {
-    const lines = Buffer.from(event.body || "", "base64").toString("utf-8");
-    console.log(lines);
+    const lines = globalThis.Buffer.from(event.body || "", "base64").toString(
+      "utf-8"
+    );
+    globalThis.console.log(lines);
 
     return send();
   } catch (error: any) {
