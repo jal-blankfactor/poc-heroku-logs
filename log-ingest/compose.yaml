@@ -1,0 +1,25 @@
+name: poc-heroku-logs
+services:
+  log-ingest:
+    container_name: log-ingest
+    build:
+      context: .
+    develop:
+      watch:
+        # TODO lambda + watch -> sync
+        - action: rebuild
+          path: ./src
+          target: /var/task
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+    networks:
+      - dev-net
+    environment:
+      - AWS_REGION=us-east-1
+    ports:
+      - 9000:8080
+
+networks:
+  dev-net: {}
