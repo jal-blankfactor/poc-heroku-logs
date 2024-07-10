@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "incremental": false,
+    "module": "Node16",
+    "target": "es2022",
+    "experimentalDecorators": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "composite": false,
+    "strict": true,
+    "moduleResolution": "Node16",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "preserveSymlinks": true,
+    "lib": ["es2023"],
+    "types": ["node"],
+    "typeRoots": ["node_modules/@types"]
+  },
+  "exclude": ["node_modules"]
+}

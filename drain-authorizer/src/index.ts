@@ -1,22 +1,25 @@
+import type { APIGatewaySimpleAuthorizerResult, Handler } from "aws-lambda";
+import type { APIGatewayProxyEventV2 } from "aws-lambda";
 import { SSMClient, GetParameterCommand } from "@aws-sdk/client-ssm";
 const { DRAIN_TOKEN_PARAM_NAME } = process.env;
 
-export const handler = async (event) => {
+export const handler: Handler = async (
+  event: APIGatewayProxyEventV2
+): Promise<APIGatewaySimpleAuthorizerResult> => {
   let isAuthorized = false;
   try {
-    const drainToken = await getParameter(DRAIN_TOKEN_PARAM_NAME);
+    const drainToken = await getParameter(DRAIN_TOKEN_PARAM_NAME!);
     isAuthorized = event.headers["logplex-drain-token"] === drainToken;
   } catch (error) {
     console.error(error);
   } finally {
     return {
       isAuthorized,
-      context: {},
     };
   }
 };
 
-async function getParameter(name) {
+async function getParameter(name: string) {
   const input = {
     Name: name,
     WithDecryption: true,

@@ -1,0 +1,25 @@
+{
+  "name": "poc-herokulogs",
+  "version": "0.2.0",
+  "private": true,
+  "description": "",
+  "keywords": [],
+  "packageManager": "npm@10.1.0",
+  "workspaces": [
+    "./drain-authorizer",
+    "./log-ingest"
+  ],
+  "devDependencies": {
+    "@biomejs/biome": "1.8.2",
+    "@tsconfig/node20": "^20.1.4",
+    "@types/node": "^20.12.11",
+    "lint-staged": "^13.2.2",
+    "pre-commit": "^1.2.2",
+    "rimraf": "^5.0.5",
+    "tsup": "^8.1.0",
+    "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  }
+}
