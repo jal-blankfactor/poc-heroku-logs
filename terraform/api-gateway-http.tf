@@ -1,6 +1,7 @@
 resource "aws_apigatewayv2_api" "poc" {
-  name          = "${local.env_prefix}-poc-http-api"
-  protocol_type = "HTTP"
+  name                         = "${local.env_prefix}-poc-http-api"
+  protocol_type                = "HTTP"
+  disable_execute_api_endpoint = true
 }
 
 resource "aws_apigatewayv2_stage" "poc" {
