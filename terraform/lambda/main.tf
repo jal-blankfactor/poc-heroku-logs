@@ -1,9 +1,8 @@
 locals {
   env_prefix     = "${var.env_level}-${var.env_name}"
   qualified_name = "${local.env_prefix}-${var.short_name}"
-  src_dir        = "${path.cwd}/${var.app_dir}/src"
   dist_dir       = "${path.cwd}/${var.app_dir}/dist"
-
+  build_dir      = "${path.cwd}/${var.app_dir}/bulid"
 }
 
 resource "null_resource" "build" {
@@ -12,14 +11,14 @@ resource "null_resource" "build" {
   }
   provisioner "local-exec" {
     working_dir = "${path.cwd}/${var.app_dir}"
-    command     = "npm install"
+    command     = "npm run build"
   }
 }
 
 data "archive_file" "self" {
   type        = "zip"
-  source_file = "${local.src_dir}/index.mjs"
-  output_path = "${local.dist_dir}/handler.zip"
+  source_file = local.dist_dir
+  output_path = "${local.build_dir}/handler.zip"
   depends_on = [
     null_resource.build
   ]
