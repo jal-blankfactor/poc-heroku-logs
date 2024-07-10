@@ -9,7 +9,7 @@ locals {
   env_name               = "dev"
   devops_prefix          = "${local.org}-ops"
   env_prefix             = "${local.env_level}-${local.env_name}"
-  drain_token_param_name = "/${local.env_name}/log-ingest/drain-token"
+  drain_token_param_name = "/${local.env_name}/log-ingest/heroku-drain-token"
 }
 
 # API GW <-> Lambda
@@ -29,31 +29,31 @@ resource "aws_lambda_permission" "invoke_drain_authorizer" {
   source_arn    = "${aws_apigatewayv2_api.poc.execution_arn}/authorizers/${aws_apigatewayv2_authorizer.drain_token.id}"
 }
 
-# SSM params
 # due to chicken and egg scenario + tf api gw oddity
 resource "random_id" "placeholder_token" {
   byte_length = 16
 }
 
-resource "aws_ssm_parameter" "drain_token" {
-  name        = local.drain_token_param_name
-  description = "Heroku drain token"
-  type        = "SecureString"
-  value       = random_id.placeholder_token.hex
-  lifecycle {
-    ignore_changes = [value]
-  }
-}
-
-# Secret manager
-# resource "aws_secretsmanager_secret" "drain_token" {
+# SSM params
+# resource "aws_ssm_parameter" "drain_token" {
 #   name        = local.drain_token_param_name
 #   description = "Heroku drain token"
+#   type        = "SecureString"
+#   value       = random_id.placeholder_token.hex
+#   lifecycle {
+#     ignore_changes = [value]
+#   }
 # }
-# resource "aws_secretsmanager_secret_version" "drain_token" {
-#   secret_id     = aws_secretsmanager_secret.drain_token.id
-#   secret_string = var.drain_token
-# }
+
+# Secret manager
+resource "aws_secretsmanager_secret" "drain_token" {
+  name        = local.drain_token_param_name
+  description = "Heroku drain token"
+}
+resource "aws_secretsmanager_secret_version" "drain_token" {
+  secret_id     = aws_secretsmanager_secret.drain_token.id
+  secret_string = random_id.placeholder_token.hex
+}
 
 # S3
 resource "random_id" "artifacts-bucket" {

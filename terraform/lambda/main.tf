@@ -50,11 +50,6 @@ resource "aws_lambda_function" "self" {
   }
 }
 
-# resource "aws_iam_role_policy_attachment" "basic" {
-#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-#   role       = aws_iam_role.self.name
-# }
-
 resource "aws_iam_role" "self" {
   name_prefix = local.qualified_name
 

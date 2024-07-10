@@ -32,10 +32,19 @@ resource "aws_iam_policy" "drain_authorizer" {
   }
 }
 
+# data "aws_iam_policy_document" "drain_authorizer" {
+#   statement {
+#     effect    = "Allow"
+#     actions   = ["ssm:GetParameter", "kms:Decrypt"]
+#     resources = [aws_ssm_parameter.drain_token.arn]
+#   }
+# }
+
+
 data "aws_iam_policy_document" "drain_authorizer" {
   statement {
     effect    = "Allow"
-    actions   = ["ssm:GetParameter", "kms:Decrypt"]
-    resources = [aws_ssm_parameter.drain_token.arn]
+    actions   = ["secretsmanager:GetSecretValue", "kms:Decrypt"]
+    resources = [aws_secretsmanager_secret.drain_token.arn]
   }
 }

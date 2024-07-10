@@ -39,8 +39,5 @@
     "*": [
       "format"
     ]
-  },
-  "dependencies": {
-    "@aws-sdk/client-ssm": "^3.613.0"
   }
 }

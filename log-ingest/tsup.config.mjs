@@ -12,6 +12,5 @@ export default defineConfig((options) => {
     target: "es2022",
     platform: "node",
     treeshake: true,
-    external: ["@aws-sdk/client-ssm"],
   };
 });
